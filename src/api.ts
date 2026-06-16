@@ -86,3 +86,18 @@ export interface AddFlightSegmentResponse {
   segment: Segment;
   trip: Trip;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Flight lookup (autocomplete the add-flight form)                           */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Response for `GET /flights/lookup?number={flightNumber}&date={YYYY-MM-DD}`.
+ * Best-effort booking/schedule details resolved from the flight-data provider
+ * (airline, airports, scheduled times), used to PREFILL the add-flight form.
+ * The user can edit every field before saving, so the server returns the full
+ * {@link FlightSegment} booking shape. A 404 means no matching flight was found.
+ */
+export interface FlightLookupResponse {
+  flight: FlightSegment;
+}

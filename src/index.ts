@@ -41,6 +41,7 @@ export type {
   AddFlightSegmentResponse,
   CreateTripRequest,
   CreateTripResponse,
+  FlightLookupResponse,
   GetTripResponse,
   ListTripsResponse,
   TripSummary,
