@@ -36,6 +36,29 @@ export interface FlightSegment {
 }
 
 /**
+ * Best-effort schedule details resolved by a flight-data provider to PREFILL
+ * the add-flight form. Unlike {@link FlightSegment}, every field except the
+ * flight number is OPTIONAL: providers often have only partial data for
+ * far-future or lightly-scheduled flights (e.g. a known departure airport/time
+ * but no arrival airport/time yet). The user completes any missing fields
+ * before saving, at which point it becomes a full {@link FlightSegment}.
+ */
+export interface FlightSchedulePrefill {
+  /** Operating airline name or IATA designator, if known. */
+  airline?: string;
+  /** Flight number, normalized (no spaces, upper-case), e.g. `"IZ592"`. */
+  flightNumber: string;
+  /** Origin airport IATA code, if resolved. */
+  origin?: IataCode;
+  /** Destination airport IATA code, if resolved. */
+  destination?: IataCode;
+  /** Scheduled departure, UTC + origin-airport-local wall time, if resolved. */
+  scheduledDeparture?: LocalizedDateTime;
+  /** Scheduled arrival, UTC + destination-airport-local wall time, if resolved. */
+  scheduledArrival?: LocalizedDateTime;
+}
+
+/**
  * Live, refreshable enrichment for a flight. Stored SEPARATELY from the
  * {@link FlightSegment} booking record (different table/record) so it can be
  * re-fetched as departure approaches without mutating the booking. Every field

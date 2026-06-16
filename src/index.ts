@@ -21,6 +21,7 @@ export type { User } from "./user.js";
 // Flight domain
 export type {
   FlightEnrichment,
+  FlightSchedulePrefill,
   FlightSegment,
   FlightStatus,
 } from "./flight.js";

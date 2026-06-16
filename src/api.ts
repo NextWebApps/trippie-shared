@@ -8,7 +8,7 @@
  */
 
 import type { IsoDate } from "./common.js";
-import type { FlightSegment } from "./flight.js";
+import type { FlightSchedulePrefill, FlightSegment } from "./flight.js";
 import type { Segment, Trip } from "./trip.js";
 
 /* -------------------------------------------------------------------------- */
@@ -95,9 +95,18 @@ export interface AddFlightSegmentResponse {
  * Response for `GET /flights/lookup?number={flightNumber}&date={YYYY-MM-DD}`.
  * Best-effort booking/schedule details resolved from the flight-data provider
  * (airline, airports, scheduled times), used to PREFILL the add-flight form.
- * The user can edit every field before saving, so the server returns the full
- * {@link FlightSegment} booking shape. A 404 means no matching flight was found.
+ * The user can edit every field before saving. Providers may resolve only PART
+ * of the schedule (e.g. a far-future return leg with a known departure but no
+ * arrival yet), so the prefill fields are individually optional and `partial`
+ * flags whether anything is missing. A 404 means no matching flight at all.
  */
 export interface FlightLookupResponse {
-  flight: FlightSegment;
+  /** Best-effort prefill; individual fields may be absent when `partial` is true. */
+  flight: FlightSchedulePrefill;
+  /**
+   * True when the provider could not resolve every booking field (origin,
+   * destination, scheduled departure/arrival) and the user must complete the
+   * rest manually. False when the prefill is complete.
+   */
+  partial: boolean;
 }
