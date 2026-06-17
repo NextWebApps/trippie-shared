@@ -1,0 +1,34 @@
+name: CI
+
+# Typecheck + build the shared types package on every PR and push to main.
+# No AWS / no deploy: trippie-shared is consumed by api/web as a versioned
+# GitHub dependency (github:NextWebApps/trippie-shared#vX.Y.Z), so "release"
+# is a manual git tag — this workflow just guards that main always compiles.
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `prepare` runs `npm run build` (tsc) during install; the explicit build
+      # step below re-runs it as the visible CI gate and emits dist/.
+      - name: Install
+        run: npm ci
+
+      - name: Build (tsc)
+        run: npm run build
