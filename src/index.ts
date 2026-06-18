@@ -26,12 +26,16 @@ export type {
   FlightStatus,
 } from "./flight.js";
 
+// Stay (lodging) domain
+export type { StaySegment, WallClockTime } from "./stay.js";
+
 // Trip domain
 export type {
   FlightTripSegment,
   Segment,
   SegmentBase,
   SegmentType,
+  StayTripSegment,
   Trip,
   TripStatus,
 } from "./trip.js";
@@ -40,8 +44,11 @@ export type {
 export type {
   AddFlightSegmentRequest,
   AddFlightSegmentResponse,
+  AddStaySegmentRequest,
+  AddStaySegmentResponse,
   CreateTripRequest,
   CreateTripResponse,
+  DeleteSegmentResponse,
   FlightLookupResponse,
   GetTripResponse,
   ListTripsResponse,

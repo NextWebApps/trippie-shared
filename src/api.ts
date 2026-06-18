@@ -9,6 +9,7 @@
 
 import type { IsoDate } from "./common.js";
 import type { FlightSchedulePrefill, FlightSegment } from "./flight.js";
+import type { StaySegment } from "./stay.js";
 import type { Segment, Trip } from "./trip.js";
 
 /* -------------------------------------------------------------------------- */
@@ -84,6 +85,41 @@ export interface AddFlightSegmentRequest {
  */
 export interface AddFlightSegmentResponse {
   segment: Segment;
+  trip: Trip;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Add stay segment                                                           */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Body for `POST /trips/{tripId}/segments/stay` adding a lodging stay. Carries
+ * the user-entered booking only; stays have no server-side enrichment.
+ */
+export interface AddStaySegmentRequest {
+  type: "stay";
+  stay: StaySegment;
+}
+
+/**
+ * Response for adding a stay — returns the created {@link Segment} and the
+ * updated parent {@link Trip} so the client can refresh in one round trip.
+ */
+export interface AddStaySegmentResponse {
+  segment: Segment;
+  trip: Trip;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Delete segment                                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Response for `DELETE /trips/{tripId}/segments/{segmentId}` — returns the
+ * updated parent {@link Trip} (without the removed segment) so the client can
+ * refresh the itinerary in one round trip.
+ */
+export interface DeleteSegmentResponse {
   trip: Trip;
 }
 

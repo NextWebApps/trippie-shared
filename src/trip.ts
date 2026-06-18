@@ -1,12 +1,13 @@
 import type { IsoDate, IsoUtcDateTime } from "./common.js";
 import type { FlightEnrichment, FlightSegment } from "./flight.js";
+import type { StaySegment } from "./stay.js";
 
 /**
- * The kind of a {@link Segment}. Currently only `"flight"`; `"cruise"`,
- * `"stay"`, and `"transport"` are planned. The {@link Segment} union is keyed
+ * The kind of a {@link Segment}. `"flight"` and `"stay"` are supported;
+ * `"cruise"` and `"transport"` are planned. The {@link Segment} union is keyed
  * on this field so new segment types slot in without breaking existing ones.
  */
-export type SegmentType = "flight";
+export type SegmentType = "flight" | "stay";
 
 /**
  * High-level lifecycle state of a trip, derived from its dates.
@@ -42,11 +43,21 @@ export interface FlightTripSegment extends SegmentBase {
 }
 
 /**
- * Discriminated union of all itinerary segments. Switch on `type` to narrow.
- * Add future variants (`CruiseTripSegment`, `StayTripSegment`,
- * `TransportTripSegment`) here as they are introduced.
+ * A lodging stay within a trip (hotel, rental, etc.). Holds the user-entered
+ * {@link StaySegment} booking. Unlike a flight, a stay has no live enrichment —
+ * it is stable, manually-entered, date-centric data.
  */
-export type Segment = FlightTripSegment;
+export interface StayTripSegment extends SegmentBase {
+  type: "stay";
+  stay: StaySegment;
+}
+
+/**
+ * Discriminated union of all itinerary segments. Switch on `type` to narrow.
+ * Add future variants (`CruiseTripSegment`, `TransportTripSegment`) here as they
+ * are introduced.
+ */
+export type Segment = FlightTripSegment | StayTripSegment;
 
 /**
  * A vacation, owned by a single user (collaborators may come later), holding
